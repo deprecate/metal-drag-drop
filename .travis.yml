@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+- '6'
+sudo: false
+addons:
+  sauce_connect:
+    username: metal-dragdrop
+    no_ssl_bump_domains: all
+  jswt:
+    secure: Fl2k5kltSYi2uofsBs42h4o8O8WZkeh2I4Lh3IC1hAxq1gQ2AAHHvL+WDGYlTw42Bdn1YxJnUGJtZTFPMudPeXptzMwwih49J0ByM2Dmtx8JtwSCRCK3rWhoQlgFKH2azgODmNv5sad6lt7bmkTtub1iBQgYPCYeTiVsfQJP+Eloe7MwjBA+diQVOEdSNg0RwPr5n17unT1oHL5noDVOdybsQ7ippVjY1grh0uQ7sVi8iMygDyPxIwDmlQMDkbBUKIBzITz1ic2LHsMpsXMAmWCetvKomze7+LDf3fkYAHwYcn+YH+V/pSfiEq3TPNK68AUloKBQeeljnbwoof2PgMC7Zpc4oCVHj8JOrOb+8FOEJqBMkozr0bSgdu8jgv+IwqxHC8dKmTYRrdDKx6l2v2Hjsvp4cmETkVveuzRJvdW8+2+MiKcEHkeZ1g+ooLZ8jYCZmVJSkIQhy/EnwBJnMgS2cIrh3ujfEifsBWch9z5LU9yWyf7xwBjxrlLHYF/yaMiIBWN0hzlzW6UGVghilirrQNVG0exCket6WJegvG1H65sFZsTjMLOC9czultkKkXswU4oshGRs92Du2pUq+FBCstGY8To+vqWc04Pqe/gHlkBabIBrqNgeQGEpuETunYN9c6ZTcDt5CeiAzY4tYmdQM+jjFwW4MxIY68hiqOU=
+before_install:
+- npm install -g gulp
+- npm install
+- gulp build
+script: gulp test:saucelabs

@@ -40,7 +40,7 @@
     "babel-plugin-transform-node-env-inline": "^0.2.0",
     "babel-preset-metal": "^4.0.0",
     "gulp": "^3.8.11",
-    "gulp-metal": "^1.9.14",
+    "gulp-metal": "^2.0.0",
     "metal-tools-soy": "^4.2.6",
     "webpack": "^3.5.5"
   }

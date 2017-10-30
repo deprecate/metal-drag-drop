@@ -12,6 +12,9 @@ describe('DragDrop', function() {
 	var target2;
 
 	beforeEach(function() {
+		// Temporary workaround for https://github.com/metal/metal.js/issues/287
+		DragDrop.hasConfiguredState_ = false;
+
 		var html = '<div class="item" style="height:50px;width:50px;"></div><div class="target"></div>';
 		dom.append(document.body, html);
 

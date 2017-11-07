@@ -18,11 +18,6 @@ var options = {
 			browserName: 'chrome',
 			version: '57'
 		},
-		sl_safari_8: {
-			base: 'SauceLabs',
-			browserName: 'safari',
-			version: '8'
-		},
 		sl_safari_9: {
 			base: 'SauceLabs',
 			browserName: 'safari',
@@ -32,6 +27,11 @@ var options = {
 			base: 'SauceLabs',
 			browserName: 'safari',
 			version: '10'
+		},
+		sl_safari_11: {
+			base: 'SauceLabs',
+			browserName: 'safari',
+			version: '11'
 		},
 		sl_firefox: {
 			base: 'SauceLabs',
@@ -62,9 +62,10 @@ var options = {
 		},
 		sl_iphone: {
 			base: 'SauceLabs',
-			browserName: 'iphone',
-			platform: 'OS X 10.10',
-			version: '9.2'
+			browserName: 'Safari',
+			device: 'iPhone 7',
+			platform: 'iOS',
+			version: '10.3'
 		},
 		sl_android_4: {
 			base: 'SauceLabs',

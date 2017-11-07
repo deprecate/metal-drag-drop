@@ -163,10 +163,7 @@ class Drag extends State {
 			{},
 			Position.getRegion(this.activeDragSource_, true)
 		);
-		this.sourceRelativePos_ = {
-			x: this.activeDragSource_.offsetLeft,
-			y: this.activeDragSource_.offsetTop,
-		};
+		this.sourceRelativePos_ = this.calculateRelativePosition_();
 		if (core.isDef(event.clientX)) {
 			this.mousePos_ = {
 				x: event.clientX,
@@ -177,6 +174,28 @@ class Drag extends State {
 				y: this.sourceRegion_.top - this.mousePos_.y,
 			};
 		}
+	}
+
+	/**
+	 * Calculates the relative position of the active drag
+	 * source.
+	 * @return {!Object}
+	 * @protected
+	 */
+	calculateRelativePosition_() {
+		let relativePos = {
+			x: this.activeDragSource_.offsetLeft,
+			y: this.activeDragSource_.offsetTop
+		};
+
+		if (this.cloneContainer) {
+			relativePos = {
+				x: this.sourceRegion_.left,
+				y: this.sourceRegion_.top
+			};
+		}
+
+		return relativePos;
 	}
 
 	/**
@@ -226,7 +245,8 @@ class Drag extends State {
 		placeholder.style.position = 'absolute';
 		placeholder.style.left = this.sourceRelativePos_.x + 'px';
 		placeholder.style.top = this.sourceRelativePos_.y + 'px';
-		dom.append(this.activeDragSource_.parentNode, placeholder);
+		dom.append(this.cloneContainer ||
+			this.activeDragSource_.parentNode, placeholder);
 		return placeholder;
 	}
 
@@ -749,6 +769,16 @@ Drag.STATE = {
 	 */
 	axis: {
 		validator: core.isString,
+	},
+
+	/**
+	 * Container element for cloned drag placeholder. Only applies if
+	 * `dragPlaceholder` is set to `Drag.Placeholder.CLONE`.
+	 * @type {Element|string}
+	 */
+	cloneContainer: {
+		setter: dom.toElement,
+		validator: 'validateElementOrString_'
 	},
 
 	/**

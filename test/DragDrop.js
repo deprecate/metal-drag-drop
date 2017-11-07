@@ -1,6 +1,7 @@
 'use strict';
 
 import dom from 'metal-dom';
+import Drag from '../src/Drag';
 import DragDrop from '../src/DragDrop';
 import DragShim from '../src/helpers/DragShim';
 import DragTestHelper from './fixtures/DragTestHelper';
@@ -356,6 +357,27 @@ describe('DragDrop', function() {
 			DragTestHelper.triggerMouseEvent(document, 'mouseup');
 			assert.ok(!target.getAttribute('aria-dropeffect'));
 			assert.ok(!target2.getAttribute('aria-dropeffect'));
+		});
+	});
+
+	describe('Clone Container', function() {
+		it('should add "targetOver" class when dragged element is on top of target', function() {
+			dragDrop = new DragDrop({
+				cloneContainer: 'body',
+				dragPlaceholder: Drag.Placeholder.CLONE,
+				sources: item,
+				targets: target
+			});
+			assert.ok(!dom.hasClass(target, 'targetOver'));
+
+			DragTestHelper.triggerMouseEvent(item, 'mousedown', 0, 0);
+			assert.ok(!dom.hasClass(target, 'targetOver'));
+
+			DragTestHelper.triggerMouseEvent(document, 'mousemove', 40, 50);
+			assert.ok(dom.hasClass(target, 'targetOver'));
+
+			DragTestHelper.triggerMouseEvent(document, 'mouseup');
+			assert.ok(!dom.hasClass(target, 'targetOver'));
 		});
 	});
 });

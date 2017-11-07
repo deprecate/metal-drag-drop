@@ -29,10 +29,10 @@
   ],
   "dependencies": {
     "bootstrap": "^3.3.6",
-    "metal": "^2.0.0",
-    "metal-events": "^2.0.0",
+    "metal": "^2.14.0",
+    "metal-events": "^2.14.0",
     "metal-position": "^2.0.0",
-    "metal-state": "^2.0.0"
+    "metal-state": "^2.14.0"
   },
   "devDependencies": {
     "babel-cli": "^6.4.5",

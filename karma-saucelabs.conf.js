@@ -1,14 +1,13 @@
 'use strict';
 
-var metal = require('gulp-metal');
+const karmaSauceLauncher = require('karma-sauce-launcher');
 
-var options = {
-	bundleCssFileName: 'dragDrop.css',
-	bundleFileName: 'dragDrop.js',
-	globalName: 'metal',
-	mainBuildJsTasks: ['build:globals'],
-	moduleName: 'metal-drag-drop',
-	testSaucelabsBrowsers: {
+const karmaConfig = require('./karma.conf.js');
+
+module.exports = function(config) {
+	karmaConfig(config);
+
+	const launchers = {
 		sl_chrome: {
 			base: 'SauceLabs',
 			browserName: 'chrome'
@@ -79,8 +78,45 @@ var options = {
 			platform: 'Linux',
 			version: '5.0'
 		}
-	},
-	noSoy: true
-};
+	};
 
-metal.registerTasks(options);
+	let sauceLabsAccessKey = process.env.SAUCE_ACCESS_KEY_ENC;
+	if (sauceLabsAccessKey) {
+		sauceLabsAccessKey = new Buffer(sauceLabsAccessKey, 'base64').toString('binary');
+	}
+
+	config.set({
+		browsers: Object.keys(launchers),
+
+		browserDisconnectTimeout: 10000,
+		browserDisconnectTolerance: 2,
+		browserNoActivityTimeout: 240000,
+
+		captureTimeout: 240000,
+
+		customLaunchers: launchers,
+
+		plugins: [
+			'karma-chai',
+			'karma-chrome-launcher',
+			'karma-mocha',
+			'karma-sinon',
+			'karma-webpack',
+			karmaSauceLauncher
+		],
+
+		reporters: ['dots', 'saucelabs'],
+
+		sauceLabs: {
+			accessKey: sauceLabsAccessKey,
+			testName: 'metal-drag-drop tests',
+			recordVideo: false,
+			recordScreenshots: false,
+			startConnect: true,
+			connectOptions: {
+				port: 5757,
+				logfile: 'sauce_connect.log'
+			}
+		}
+	});
+};

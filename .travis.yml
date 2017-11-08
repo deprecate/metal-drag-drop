@@ -11,5 +11,4 @@ addons:
 before_install:
 - npm install -g gulp
 - npm install
-- gulp build
-script: gulp test:saucelabs
+script: npm run test:saucelabs

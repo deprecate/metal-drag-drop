@@ -154,6 +154,25 @@ class Drag extends State {
 	}
 
 	/**
+	 * Calculates the end positions for the drag action when
+	 * `cloneContainer` is set.
+	 * @return {!Object}
+	 * @protected
+	 */
+	calculateEndPosition_() {
+		let endPos = this.sourceRelativePos_;
+
+		const {parentNode} = this.activeDragSource_;
+
+		if (parentNode !== this.cloneContainer) {
+			endPos.x = endPos.x - parentNode.offsetLeft;
+			endPos.y = endPos.y - parentNode.offsetTop;
+		}
+
+		return endPos;
+	}
+
+	/**
 	 * Calculates the initial positions for the drag action.
 	 * @param {!Event} event
 	 * @protected
@@ -354,6 +373,10 @@ class Drag extends State {
 	 * @protected
 	 */
 	defaultEndFn_() {
+		if (this.cloneContainer) {
+			this.sourceRelativePos_ = this.calculateEndPosition_();
+		}
+
 		this.moveToPosition_(this.activeDragSource_);
 	}
 

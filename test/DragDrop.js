@@ -13,12 +13,14 @@ describe('DragDrop', function() {
 	let target2;
 
 	beforeEach(function() {
+		var parent = document.createElement('div');
+		dom.addClasses(parent, 'parent');
 		let html =
 			'<div class="item" style="height:50px;width:50px;"></div><div class="target"></div>';
-		dom.append(document.body, html);
+		dom.append(parent, html);
 
-		item = document.querySelector('.item');
-		target = document.querySelector('.target');
+		item = parent.querySelector('.item');
+		target = parent.querySelector('.target');
 		target.style.position = 'absolute';
 		target.style.top = '10px';
 		target.style.left = '20px';
@@ -27,7 +29,8 @@ describe('DragDrop', function() {
 
 		target2 = target.cloneNode(true);
 		target2.style.left = '250px';
-		dom.append(document.body, target2);
+		dom.append(parent, target2);
+		dom.append(document.body, parent);
 
 		DragShim.reset();
 	});
@@ -362,6 +365,12 @@ describe('DragDrop', function() {
 
 	describe('Clone Container', function() {
 		it('should add "targetOver" class when dragged element is on top of target', function() {
+			const parent = document.querySelector('.parent');
+
+			parent.style.position = 'relative';
+			parent.style.left = '20px';
+			parent.style.top = '40px';
+
 			dragDrop = new DragDrop({
 				cloneContainer: 'body',
 				dragPlaceholder: Drag.Placeholder.CLONE,
@@ -373,7 +382,7 @@ describe('DragDrop', function() {
 			DragTestHelper.triggerMouseEvent(item, 'mousedown', 0, 0);
 			assert.ok(!dom.hasClass(target, 'targetOver'));
 
-			DragTestHelper.triggerMouseEvent(document, 'mousemove', 40, 50);
+			DragTestHelper.triggerMouseEvent(document, 'mousemove', 60, 90);
 			assert.ok(dom.hasClass(target, 'targetOver'));
 
 			DragTestHelper.triggerMouseEvent(document, 'mouseup');

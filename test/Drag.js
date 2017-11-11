@@ -14,6 +14,9 @@ describe('Drag', function() {
 	beforeEach(function() {
 		var parent = document.createElement('div');
 		dom.addClasses(parent, 'parent');
+		parent.style.position = 'absolute';
+		parent.style.left = 0;
+		parent.style.top = 0;
 		let html =
 			'<div class="item" style="position:fixed;top:20px;left:20px;">' +
 			'<span class="handle"></span></div>';

@@ -207,7 +207,7 @@ class Drag extends State {
 			y: this.activeDragSource_.offsetTop
 		};
 
-		if (this.cloneContainer) {
+		if (this.isPlaceholderClone_() && this.cloneContainer) {
 			relativePos = {
 				x: this.sourceRegion_.left,
 				y: this.sourceRegion_.top
@@ -240,7 +240,7 @@ class Drag extends State {
 		if (this.activeDragPlaceholder_) {
 			this.activeDragPlaceholder_.setAttribute('aria-grabbed', 'false');
 			dom.removeClasses(this.activeDragPlaceholder_, this.draggingClass);
-			if (this.dragPlaceholder === Drag.Placeholder.CLONE) {
+			if (this.isPlaceholderClone_()) {
 				dom.exitDocument(this.activeDragPlaceholder_);
 			}
 		}
@@ -347,7 +347,7 @@ class Drag extends State {
 	 */
 	createActiveDragPlaceholder_() {
 		let dragPlaceholder = this.dragPlaceholder;
-		if (dragPlaceholder === Drag.Placeholder.CLONE) {
+		if (this.isPlaceholderClone_()) {
 			this.activeDragPlaceholder_ = this.cloneActiveDrag_();
 		} else if (core.isElement(dragPlaceholder)) {
 			this.activeDragPlaceholder_ = dragPlaceholder;
@@ -373,7 +373,7 @@ class Drag extends State {
 	 * @protected
 	 */
 	defaultEndFn_() {
-		if (this.cloneContainer) {
+		if (this.isPlaceholderClone_() && this.cloneContainer) {
 			this.sourceRelativePos_ = this.calculateEndPosition_();
 		}
 
@@ -604,6 +604,17 @@ class Drag extends State {
 	}
 
 	/**
+	 * Returns true if current drag placeholder is a clone of the original drag
+	 * source.
+	 * @return {boolean}
+	 * @protected
+	 */
+	isPlaceholderClone_() {
+		return this.dragPlaceholder && this.dragPlaceholder ===
+			Drag.Placeholder.CLONE;
+	}
+
+	/**
 	 * Checks if the given element is within a valid handle.
 	 * @param {!Element} element
 	 * @protected
@@ -801,7 +812,8 @@ Drag.STATE = {
 	 */
 	cloneContainer: {
 		setter: dom.toElement,
-		validator: 'validateElementOrString_'
+		validator: 'validateElementOrString_',
+		value: 'body'
 	},
 
 	/**

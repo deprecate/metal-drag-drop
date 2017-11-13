@@ -595,6 +595,26 @@ describe('Drag', function() {
 			assert.strictEqual(event.placeholder.parentNode, document.body);
 			assert.strictEqual(item, event.source);
 		});
+
+		it('should overwrite "cloneContainer" default value with null', function() {
+			drag = new Drag({
+				cloneContainer: null,
+				dragPlaceholder: Drag.Placeholder.CLONE,
+				sources: item,
+			});
+
+			assert.notStrictEqual(drag.cloneContainer, document.body);
+			assert.ok(!drag.cloneContainer);
+
+			let listener = sinon.stub();
+			drag.on(Drag.Events.DRAG, listener);
+
+			DragTestHelper.triggerMouseEvent(item, 'mousedown', 20, 20);
+			DragTestHelper.triggerMouseEvent(document, 'mousemove', 40, 50);
+
+			let event = listener.args[0][0];
+			assert.notStrictEqual(event.placeholder.parentNode, document.body);
+		});
 	});
 
 	describe('Scroll', function() {

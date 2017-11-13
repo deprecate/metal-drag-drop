@@ -770,6 +770,17 @@ class Drag extends State {
 	}
 
 	/**
+	 * Validates the given value, making sure that it's either an element,
+	 * string, or null.
+	 * @param {*} val
+	 * @return {boolean}
+	 * @protected
+	 */
+	validateCloneContainer_(val) {
+		return val === null || this.validateElementOrString_(val);
+	}
+
+	/**
 	 * Validates the value of the `constrain` state.
 	 * @param {*} val
 	 * @return {boolean}
@@ -811,11 +822,11 @@ Drag.STATE = {
 	/**
 	 * Container element for cloned drag placeholder. Only applies if
 	 * `dragPlaceholder` is set to `Drag.Placeholder.CLONE`.
-	 * @type {Element|string}
+	 * @type {?Element|string}
 	 */
 	cloneContainer: {
 		setter: dom.toElement,
-		validator: 'validateElementOrString_',
+		validator: 'validateCloneContainer_',
 		value: 'body',
 	},
 

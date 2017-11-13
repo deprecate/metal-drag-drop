@@ -12,16 +12,21 @@ describe('Drag', function() {
 	let item2;
 
 	beforeEach(function() {
+		let parent = document.createElement('div');
+		dom.addClasses(parent, 'parent');
+		parent.style.position = 'absolute';
+		parent.style.left = 0;
+		parent.style.top = 0;
 		let html =
 			'<div class="item" style="position:fixed;top:20px;left:20px;">' +
 			'<span class="handle"></span></div>';
-		dom.append(document.body, html);
-
-		item = document.querySelector('.item');
+		dom.append(parent, html);
+		item = parent.querySelector('.item');
 		item2 = item.cloneNode(true);
 		dom.addClasses(item, 'item1');
 		dom.addClasses(item2, 'item2');
-		dom.append(document.body, item2);
+		dom.append(parent, item2);
+		dom.append(document.body, parent);
 	});
 
 	afterEach(function() {
@@ -565,6 +570,50 @@ describe('Drag', function() {
 
 			assert.strictEqual('20px', item.style.left);
 			assert.strictEqual('20px', item.style.top);
+		});
+
+		it('should clone drag source into "cloneContainer" element', function() {
+			drag = new Drag({
+				dragPlaceholder: Drag.Placeholder.CLONE,
+				sources: item,
+			});
+
+			let listener = sinon.stub();
+			drag.on(Drag.Events.DRAG, listener);
+
+			DragTestHelper.triggerMouseEvent(item, 'mousedown', 20, 20);
+			DragTestHelper.triggerMouseEvent(document, 'mousemove', 40, 50);
+
+			assert.strictEqual('20px', item.style.left);
+			assert.strictEqual('20px', item.style.top);
+
+			let event = listener.args[0][0];
+			assert.notStrictEqual(item, event.placeholder);
+			assert.ok(dom.hasClass(event.placeholder, 'dragging'));
+			assert.strictEqual(40 + 'px', event.placeholder.style.left);
+			assert.strictEqual(50 + 'px', event.placeholder.style.top);
+			assert.strictEqual(event.placeholder.parentNode, document.body);
+			assert.strictEqual(item, event.source);
+		});
+
+		it('should overwrite "cloneContainer" default value with null', function() {
+			drag = new Drag({
+				cloneContainer: null,
+				dragPlaceholder: Drag.Placeholder.CLONE,
+				sources: item,
+			});
+
+			assert.notStrictEqual(drag.cloneContainer, document.body);
+			assert.ok(!drag.cloneContainer);
+
+			let listener = sinon.stub();
+			drag.on(Drag.Events.DRAG, listener);
+
+			DragTestHelper.triggerMouseEvent(item, 'mousedown', 20, 20);
+			DragTestHelper.triggerMouseEvent(document, 'mousemove', 40, 50);
+
+			let event = listener.args[0][0];
+			assert.notStrictEqual(event.placeholder.parentNode, document.body);
 		});
 	});
 

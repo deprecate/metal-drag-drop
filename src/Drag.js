@@ -154,6 +154,25 @@ class Drag extends State {
 	}
 
 	/**
+	 * Calculates the end positions for the drag action when
+	 * `cloneContainer` is set.
+	 * @return {!Object}
+	 * @protected
+	 */
+	calculateEndPosition_() {
+		let endPos = this.sourceRelativePos_;
+
+		const {parentNode} = this.activeDragSource_;
+
+		if (parentNode !== this.cloneContainer) {
+			endPos.x = endPos.x - parentNode.offsetLeft;
+			endPos.y = endPos.y - parentNode.offsetTop;
+		}
+
+		return endPos;
+	}
+
+	/**
 	 * Calculates the initial positions for the drag action.
 	 * @param {!Event} event
 	 * @protected
@@ -163,10 +182,7 @@ class Drag extends State {
 			{},
 			Position.getRegion(this.activeDragSource_, true)
 		);
-		this.sourceRelativePos_ = {
-			x: this.activeDragSource_.offsetLeft,
-			y: this.activeDragSource_.offsetTop,
-		};
+		this.sourceRelativePos_ = this.calculateRelativePosition_();
 		if (core.isDef(event.clientX)) {
 			this.mousePos_ = {
 				x: event.clientX,
@@ -177,6 +193,28 @@ class Drag extends State {
 				y: this.sourceRegion_.top - this.mousePos_.y,
 			};
 		}
+	}
+
+	/**
+	 * Calculates the relative position of the active drag
+	 * source.
+	 * @return {!Object}
+	 * @protected
+	 */
+	calculateRelativePosition_() {
+		let relativePos = {
+			x: this.activeDragSource_.offsetLeft,
+			y: this.activeDragSource_.offsetTop,
+		};
+
+		if (this.isPlaceholderClone_() && this.cloneContainer) {
+			relativePos = {
+				x: this.sourceRegion_.left,
+				y: this.sourceRegion_.top,
+			};
+		}
+
+		return relativePos;
 	}
 
 	/**
@@ -202,7 +240,7 @@ class Drag extends State {
 		if (this.activeDragPlaceholder_) {
 			this.activeDragPlaceholder_.setAttribute('aria-grabbed', 'false');
 			dom.removeClasses(this.activeDragPlaceholder_, this.draggingClass);
-			if (this.dragPlaceholder === Drag.Placeholder.CLONE) {
+			if (this.isPlaceholderClone_()) {
 				dom.exitDocument(this.activeDragPlaceholder_);
 			}
 		}
@@ -226,7 +264,10 @@ class Drag extends State {
 		placeholder.style.position = 'absolute';
 		placeholder.style.left = this.sourceRelativePos_.x + 'px';
 		placeholder.style.top = this.sourceRelativePos_.y + 'px';
-		dom.append(this.activeDragSource_.parentNode, placeholder);
+		dom.append(
+			this.cloneContainer || this.activeDragSource_.parentNode,
+			placeholder
+		);
 		return placeholder;
 	}
 
@@ -308,7 +349,7 @@ class Drag extends State {
 	 */
 	createActiveDragPlaceholder_() {
 		let dragPlaceholder = this.dragPlaceholder;
-		if (dragPlaceholder === Drag.Placeholder.CLONE) {
+		if (this.isPlaceholderClone_()) {
 			this.activeDragPlaceholder_ = this.cloneActiveDrag_();
 		} else if (core.isElement(dragPlaceholder)) {
 			this.activeDragPlaceholder_ = dragPlaceholder;
@@ -334,6 +375,10 @@ class Drag extends State {
 	 * @protected
 	 */
 	defaultEndFn_() {
+		if (this.isPlaceholderClone_() && this.cloneContainer) {
+			this.sourceRelativePos_ = this.calculateEndPosition_();
+		}
+
 		this.moveToPosition_(this.activeDragSource_);
 	}
 
@@ -561,6 +606,19 @@ class Drag extends State {
 	}
 
 	/**
+	 * Returns true if current drag placeholder is a clone of the original drag
+	 * source.
+	 * @return {boolean}
+	 * @protected
+	 */
+	isPlaceholderClone_() {
+		return (
+			// eslint-disable-next-line
+			this.dragPlaceholder && this.dragPlaceholder === Drag.Placeholder.CLONE
+		);
+	}
+
+	/**
 	 * Checks if the given element is within a valid handle.
 	 * @param {!Element} element
 	 * @protected
@@ -713,6 +771,17 @@ class Drag extends State {
 	}
 
 	/**
+	 * Validates the given value, making sure that it's either an element,
+	 * string, or null.
+	 * @param {*} val
+	 * @return {boolean}
+	 * @protected
+	 */
+	validateCloneContainer_(val) {
+		return val === null || this.validateElementOrString_(val);
+	}
+
+	/**
 	 * Validates the value of the `constrain` state.
 	 * @param {*} val
 	 * @return {boolean}
@@ -749,6 +818,17 @@ Drag.STATE = {
 	 */
 	axis: {
 		validator: core.isString,
+	},
+
+	/**
+	 * Container element for cloned drag placeholder. Only applies if
+	 * `dragPlaceholder` is set to `Drag.Placeholder.CLONE`.
+	 * @type {?Element|string}
+	 */
+	cloneContainer: {
+		setter: dom.toElement,
+		validator: 'validateCloneContainer_',
+		value: 'body',
 	},
 
 	/**

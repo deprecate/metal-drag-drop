@@ -100,7 +100,8 @@ class DragAutoScroll extends State {
 				Math.abs(mouseX - scrollRegion.left) <= this.maxDistance
 			) {
 				deltaX -= this.speed;
-			} else if (Math.abs(mouseX - scrollRegion.right) <= this.maxDistance) { // eslint-disable-line
+				// eslint-disable-next-line
+			} else if (Math.abs(mouseX - scrollRegion.right) <= this.maxDistance) {
 				deltaX += this.speed;
 			}
 			if (
@@ -108,7 +109,8 @@ class DragAutoScroll extends State {
 				Math.abs(mouseY - scrollRegion.top) <= this.maxDistance
 			) {
 				deltaY -= this.speed;
-			} else if (Math.abs(mouseY - scrollRegion.bottom) <= this.maxDistance) { // eslint-disable-line
+				// eslint-disable-next-line
+			} else if (Math.abs(mouseY - scrollRegion.bottom) <= this.maxDistance) {
 				deltaY += this.speed;
 			}
 

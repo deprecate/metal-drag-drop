@@ -613,6 +613,7 @@ class Drag extends State {
 	 */
 	isPlaceholderClone_() {
 		return (
+			// eslint-disable-next-line
 			this.dragPlaceholder && this.dragPlaceholder === Drag.Placeholder.CLONE
 		);
 	}

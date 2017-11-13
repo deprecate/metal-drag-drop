@@ -13,7 +13,7 @@ describe('DragDrop', function() {
 	let target2;
 
 	beforeEach(function() {
-		var parent = document.createElement('div');
+		let parent = document.createElement('div');
 		dom.addClasses(parent, 'parent');
 		let html =
 			'<div class="item" style="height:50px;width:50px;"></div><div class="target"></div>';
@@ -375,7 +375,7 @@ describe('DragDrop', function() {
 				cloneContainer: 'body',
 				dragPlaceholder: Drag.Placeholder.CLONE,
 				sources: item,
-				targets: target
+				targets: target,
 			});
 			assert.ok(!dom.hasClass(target, 'targetOver'));
 

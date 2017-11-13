@@ -204,13 +204,13 @@ class Drag extends State {
 	calculateRelativePosition_() {
 		let relativePos = {
 			x: this.activeDragSource_.offsetLeft,
-			y: this.activeDragSource_.offsetTop
+			y: this.activeDragSource_.offsetTop,
 		};
 
 		if (this.isPlaceholderClone_() && this.cloneContainer) {
 			relativePos = {
 				x: this.sourceRegion_.left,
-				y: this.sourceRegion_.top
+				y: this.sourceRegion_.top,
 			};
 		}
 
@@ -264,8 +264,10 @@ class Drag extends State {
 		placeholder.style.position = 'absolute';
 		placeholder.style.left = this.sourceRelativePos_.x + 'px';
 		placeholder.style.top = this.sourceRelativePos_.y + 'px';
-		dom.append(this.cloneContainer ||
-			this.activeDragSource_.parentNode, placeholder);
+		dom.append(
+			this.cloneContainer || this.activeDragSource_.parentNode,
+			placeholder
+		);
 		return placeholder;
 	}
 
@@ -610,8 +612,9 @@ class Drag extends State {
 	 * @protected
 	 */
 	isPlaceholderClone_() {
-		return this.dragPlaceholder && this.dragPlaceholder ===
-			Drag.Placeholder.CLONE;
+		return (
+			this.dragPlaceholder && this.dragPlaceholder === Drag.Placeholder.CLONE
+		);
 	}
 
 	/**
@@ -813,7 +816,7 @@ Drag.STATE = {
 	cloneContainer: {
 		setter: dom.toElement,
 		validator: 'validateElementOrString_',
-		value: 'body'
+		value: 'body',
 	},
 
 	/**

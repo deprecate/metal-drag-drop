@@ -12,7 +12,7 @@ describe('Drag', function() {
 	let item2;
 
 	beforeEach(function() {
-		var parent = document.createElement('div');
+		let parent = document.createElement('div');
 		dom.addClasses(parent, 'parent');
 		parent.style.position = 'absolute';
 		parent.style.left = 0;
@@ -576,10 +576,10 @@ describe('Drag', function() {
 			drag = new Drag({
 				cloneContainer: 'body',
 				dragPlaceholder: Drag.Placeholder.CLONE,
-				sources: item
+				sources: item,
 			});
 
-			var listener = sinon.stub();
+			let listener = sinon.stub();
 			drag.on(Drag.Events.DRAG, listener);
 
 			DragTestHelper.triggerMouseEvent(item, 'mousedown', 20, 20);
@@ -588,7 +588,7 @@ describe('Drag', function() {
 			assert.strictEqual('20px', item.style.left);
 			assert.strictEqual('20px', item.style.top);
 
-			var event = listener.args[0][0];
+			let event = listener.args[0][0];
 			assert.notStrictEqual(item, event.placeholder);
 			assert.ok(dom.hasClass(event.placeholder, 'dragging'));
 			assert.strictEqual(40 + 'px', event.placeholder.style.left);

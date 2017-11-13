@@ -574,7 +574,6 @@ describe('Drag', function() {
 
 		it('should clone drag source into "cloneContainer" element', function() {
 			drag = new Drag({
-				cloneContainer: 'body',
 				dragPlaceholder: Drag.Placeholder.CLONE,
 				sources: item,
 			});

@@ -372,7 +372,6 @@ describe('DragDrop', function() {
 			parent.style.top = '40px';
 
 			dragDrop = new DragDrop({
-				cloneContainer: 'body',
 				dragPlaceholder: Drag.Placeholder.CLONE,
 				sources: item,
 				targets: target,

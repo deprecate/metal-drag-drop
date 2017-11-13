@@ -12,8 +12,8 @@ class DragAutoScroll extends State {
 	/**
 	 * @inheritDoc
 	 */
-	constructor(opt_config) {
-		super(opt_config);
+	constructor(config) {
+		super(config);
 
 		/**
 		 * The handler for the current call to `setTimeout`.
@@ -86,7 +86,7 @@ class DragAutoScroll extends State {
 	 */
 	scrollInternal_(scrollContainers, mouseX, mouseY) {
 		for (let i = 0; i < scrollContainers.length; i++) {
-			let scrollRegion = this.getRegionWithoutScroll_(scrollContainers[i]);
+			let scrollRegion = this.getRegionWithoutScroll_(scrollContainers[i]); // eslint-disable-line
 			if (!Position.pointInsideRegion(mouseX, mouseY, scrollRegion)) {
 				continue;
 			}
@@ -100,7 +100,7 @@ class DragAutoScroll extends State {
 				Math.abs(mouseX - scrollRegion.left) <= this.maxDistance
 			) {
 				deltaX -= this.speed;
-			} else if (Math.abs(mouseX - scrollRegion.right) <= this.maxDistance) {
+			} else if (Math.abs(mouseX - scrollRegion.right) <= this.maxDistance) { // eslint-disable-line
 				deltaX += this.speed;
 			}
 			if (
@@ -108,7 +108,7 @@ class DragAutoScroll extends State {
 				Math.abs(mouseY - scrollRegion.top) <= this.maxDistance
 			) {
 				deltaY -= this.speed;
-			} else if (Math.abs(mouseY - scrollRegion.bottom) <= this.maxDistance) {
+			} else if (Math.abs(mouseY - scrollRegion.bottom) <= this.maxDistance) { // eslint-disable-line
 				deltaY += this.speed;
 			}
 

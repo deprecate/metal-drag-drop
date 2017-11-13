@@ -18,8 +18,8 @@ class Drag extends State {
 	/**
 	 * @inheritDoc
 	 */
-	constructor(opt_config) {
-		super(opt_config);
+	constructor(config) {
+		super(config);
 
 		/**
 		 * The drag placeholder that is active at the moment.
@@ -126,6 +126,7 @@ class Drag extends State {
 			let listenerFn = toAttach[eventTypes[i]];
 			if (core.isString(this.sources)) {
 				this.sourceHandler_.add(
+					// eslint-disable-next-line
 					dom.delegate(this.container, eventTypes[i], this.sources, listenerFn)
 				);
 			} else {
@@ -426,6 +427,7 @@ class Drag extends State {
 			if (event.type === 'keydown') {
 				this.startDragging_(event);
 			} else {
+				// eslint-disable-next-line
 				this.dragHandler_.add.apply(
 					this.dragHandler_,
 					DragShim.attachDocListeners(this.useShim, {
@@ -562,6 +564,7 @@ class Drag extends State {
 	 * Checks if the given element is within a valid handle.
 	 * @param {!Element} element
 	 * @protected
+	 * @return {boolean}
 	 */
 	isWithinHandle_(element) {
 		let handles = this.handles;

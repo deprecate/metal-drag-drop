@@ -15,8 +15,8 @@ class DragDrop extends Drag {
 	/**
 	 * @inheritDoc
 	 */
-	constructor(opt_config) {
-		super(opt_config);
+	constructor(config) {
+		super(config);
 
 		/**
 		 * The currently active targets, that is, the ones that the dragged source is over.
@@ -77,6 +77,7 @@ class DragDrop extends Drag {
 					targets[index] !== this.activeDragPlaceholder_ &&
 					Position.intersectRegion(region, sourceRegion)
 				) {
+					// eslint-disable-next-line
 					if (!mainRegion || Position.insideRegion(mainRegion, region)) {
 						activeTargets = [targets[index]].concat(activeTargets);
 						mainRegion = region;
@@ -148,7 +149,6 @@ class DragDrop extends Drag {
 	/**
 	 * Overrides the original method from `Drag` to also set the "aria-dropeffect"
 	 * attribute, if set, for all targets.
-	 * @return {[type]} [description]
 	 */
 	startDragging_() {
 		if (this.ariaDropEffect) {
@@ -173,13 +173,13 @@ class DragDrop extends Drag {
 		if (newTargets[0] !== this.activeTargets_[0]) {
 			if (this.activeTargets_[0]) {
 				dom.removeClasses(this.activeTargets_[0], this.targetOverClass);
-				this.emit(DragDrop.Events.TARGET_LEAVE, this.buildEventObject_());
+				this.emit(DragDrop.Events.TARGET_LEAVE, this.buildEventObject_()); // eslint-disable-line
 			}
 
 			this.activeTargets_ = newTargets;
 			if (this.activeTargets_[0]) {
 				dom.addClasses(this.activeTargets_[0], this.targetOverClass);
-				this.emit(DragDrop.Events.TARGET_ENTER, this.buildEventObject_());
+				this.emit(DragDrop.Events.TARGET_ENTER, this.buildEventObject_()); // eslint-disable-line
 			}
 		}
 	}

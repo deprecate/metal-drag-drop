@@ -29,6 +29,10 @@ don't have it yet.
 
 5. Open the demo at demos/index.html on your browser.
 
+## API
+
+See the [API.md](https://github.com/metal/metal-drag-drop/blob/master/API.md) file for API docs.
+
 ## Contributing
 
 Check out the [contributing guidelines](https://github.com/metal/metal-drag-drop/blob/master/CONTRIBUTING.md) for more information.

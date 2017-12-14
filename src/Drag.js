@@ -462,6 +462,8 @@ class Drag extends State {
 	 * @protected
 	 */
 	handleDragStartEvent_(event) {
+		event.stopPropagation();
+
 		this.activeDragSource_ = event.delegateTarget || event.currentTarget;
 
 		if (this.canStartDrag_(event)) {

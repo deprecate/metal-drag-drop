@@ -10,6 +10,7 @@ describe('Drag', function() {
 	let drag;
 	let item;
 	let item2;
+	let item3;
 
 	beforeEach(function() {
 		let parent = document.createElement('div');
@@ -18,14 +19,21 @@ describe('Drag', function() {
 		parent.style.left = 0;
 		parent.style.top = 0;
 		let html =
-			'<div class="item" style="position:fixed;top:20px;left:20px;">' +
-			'<span class="handle"></span></div>';
+			'<div class="item" style="position:fixed;top:20px;left:20px;' +
+			'width:10px;height:10px;"><span class="handle"></span></div>';
 		dom.append(parent, html);
 		item = parent.querySelector('.item');
 		item2 = item.cloneNode(true);
+		item3 = item.cloneNode(true);
+		item3.setAttribute(
+			'style',
+			'position:relative;top:0px;left:0px;width:5px;height:5px'
+		);
 		dom.addClasses(item, 'item1');
 		dom.addClasses(item2, 'item2');
+		dom.addClasses(item3, 'item3');
 		dom.append(parent, item2);
+		dom.append(item2, item3);
 		dom.append(document.body, parent);
 	});
 
@@ -445,7 +453,8 @@ describe('Drag', function() {
 			DragTestHelper.triggerMouseEvent(document, 'mousemove', 40, 50);
 			assert.strictEqual(item, drag.getActiveDrag());
 
-			dom.on(document, 'mouseup');
+			DragTestHelper.triggerMouseEvent(document, 'mouseup');
+
 			DragTestHelper.triggerMouseEvent(
 				item2.querySelector('.handle'),
 				'mousedown',
@@ -454,6 +463,24 @@ describe('Drag', function() {
 			);
 			DragTestHelper.triggerMouseEvent(document, 'mousemove', 40, 50);
 			assert.strictEqual(item2, drag.getActiveDrag());
+		});
+
+		it('should work with nested sources independently', function() {
+			drag = new Drag({
+				handles: '.handle',
+				sources: '.item',
+			});
+
+			DragTestHelper.triggerMouseEvent(
+				item3.querySelector('.handle'),
+				'mousedown',
+				20,
+				20
+			);
+			DragTestHelper.triggerMouseEvent(document, 'mousemove', 40, 50);
+			assert.strictEqual(item3, drag.getActiveDrag());
+
+			DragTestHelper.triggerMouseEvent(document, 'mouseup');
 		});
 	});
 

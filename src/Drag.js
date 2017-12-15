@@ -107,7 +107,10 @@ class Drag extends State {
 		this.on(Drag.Events.END, this.defaultEndFn_, true);
 		this.on('sourcesChanged', this.handleSourcesChanged_.bind(this));
 		this.on('containerChanged', this.handleContainerChanged_.bind(this));
-		this.dragScrollDelta_.on('scrollDelta', this.handleScrollDelta_.bind(this));
+		this.dragScrollDelta_.on(
+			'scrollDelta',
+			this.handleScrollDelta_.bind(this)
+		);
 		dom.on(document, 'keydown', this.handleKeyDown_.bind(this));
 	}
 
@@ -127,7 +130,12 @@ class Drag extends State {
 			if (core.isString(this.sources)) {
 				this.sourceHandler_.add(
 					// eslint-disable-next-line
-					dom.delegate(this.container, eventTypes[i], this.sources, listenerFn)
+					dom.delegate(
+						this.container,
+						eventTypes[i],
+						this.sources,
+						listenerFn
+					)
 				);
 			} else {
 				this.sourceHandler_.add(
@@ -466,7 +474,8 @@ class Drag extends State {
 			event.preventDefault();
 			event.stopPropagation();
 
-			this.activeDragSource_ = event.delegateTarget || event.currentTarget;
+			this.activeDragSource_ =
+				event.delegateTarget || event.currentTarget;
 
 			this.calculateInitialPosition_(
 				event.targetTouches ? event.targetTouches[0] : event
@@ -616,7 +625,8 @@ class Drag extends State {
 	isPlaceholderClone_() {
 		return (
 			// eslint-disable-next-line
-			this.dragPlaceholder && this.dragPlaceholder === Drag.Placeholder.CLONE
+			this.dragPlaceholder &&
+			this.dragPlaceholder === Drag.Placeholder.CLONE
 		);
 	}
 

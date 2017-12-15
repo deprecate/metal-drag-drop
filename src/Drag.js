@@ -462,15 +462,15 @@ class Drag extends State {
 	 * @protected
 	 */
 	handleDragStartEvent_(event) {
-		event.stopPropagation();
-
-		this.activeDragSource_ = event.delegateTarget || event.currentTarget;
-
 		if (this.canStartDrag_(event)) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			this.activeDragSource_ = event.delegateTarget || event.currentTarget;
+
 			this.calculateInitialPosition_(
 				event.targetTouches ? event.targetTouches[0] : event
 			);
-			event.preventDefault();
 			if (event.type === 'keydown') {
 				this.startDragging_(event);
 			} else {
